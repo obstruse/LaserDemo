@@ -47,11 +47,11 @@ LaserBoy has options for optimizing the output (e.g.: h - shiftS) which might al
 Convert the text file to an include file (.h):
 
 ```
-scripts/convert.pl filename
+Scripts/convert.pl filename
 ```
 A second conversion script is also provided:
 ```
-scripts/convert2.pl filename
+Scripts/convert2.pl filename
 ```
 ...which returns the laser position to the starting point at the end of the object, to improve looping.
 
