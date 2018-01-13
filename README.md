@@ -21,3 +21,5 @@ Global variables use 41296 bytes (50%) of dynamic memory, leaving 40624 bytes fo
   The web page allows you to select objects defined in the program:
 
 ![Screenshot](Images/Screenshot.png)
+
+The web page is generated dynamically from the contents of the objName and genName arrays.
