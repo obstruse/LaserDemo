@@ -42,11 +42,19 @@ Convert the ILD file to text using LaserBoy http://laserboy.org/code/LaserBoy_20
 - 3 all frames
 - filename
 
+LaserBoy has options for optimizing the output (e.g.: h - shiftS) which might also be useful.
+
 Convert the text file to an include file (.h):
 
 ```
 scripts/convert.pl filename
 ```
+A second conversion script is also provided:
+```
+scripts/convert2.pl filename
+```
+...which returns the laser position to the starting point at the end of the object, to improve looping.
+
 
 ### Add initializer code to the bottom of the include file.  For example:
 
