@@ -18,8 +18,15 @@ Global variables use 41296 bytes (50%) of dynamic memory, leaving 40624 bytes fo
 
 ## User Interface
 
-  The web page allows you to select objects defined in the program:
+  The web page allows you to select objects for display:
 
 ![Screenshot](Images/Screenshot.png)
 
-The web page is generated dynamically from the contents of the objName and genName arrays.
+- The Object and Generator lists are generated dynamically from the contents of the objName and genName arrays.
+- **KPPS** is the speed of the scanner, Kilo Positions Per Second
+- **LTD** Laser Toggle Delay, the latency of the scanner, in milliseconds
+- **LQ** Laser Quality, maximum line length
+
+## Adding Objects
+
+
