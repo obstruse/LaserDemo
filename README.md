@@ -29,4 +29,50 @@ Global variables use 41296 bytes (50%) of dynamic memory, leaving 40624 bytes fo
 
 ## Adding Objects
 
+### Convert an ILDA file to an include object (.h)
 
+Convert the ILD file to text using LaserBoy http://laserboy.org/code/LaserBoy_2017_08_06.zip:
+
+- i input
+- 1 ILD
+- filename
+- 1 replace
+- o output
+- 4 text
+- 3 all frames
+- filename
+
+Convert the text file to an include file (.h):
+
+```
+scripts/convert.pl filename
+```
+
+### Add initializer code to the bottom of the include file.  For example:
+
+```
+...
+0x49d0b65,
+0x49d0b65,
+};
+
+
+void ilda12k() {
+  objectCount++;  
+  objectAddress[objectCount] = draw_ilda12k;
+  objectName[objectCount] = "ILDA12K";
+  objectSize[objectCount] = sizeof(draw_ilda12k)/sizeof(uint32_t);
+}
+```
+
+### Include the file in the program:
+```
+#include "ilda12k.h"
+```
+
+### Initialize the object in the setup() section:
+
+```
+  ilda12k();
+
+```
