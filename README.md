@@ -25,7 +25,7 @@ Global variables use 41296 bytes (50%) of dynamic memory, leaving 40624 bytes fo
 - The Object and Generator lists are generated dynamically from the contents of the objName and genName arrays.
 - **KPPS** is the speed of the scanner, Kilo Positions Per Second
 - **LTD** Laser Toggle Delay, the latency of the scanner, in milliseconds
-- **LQ** Laser Quality, maximum line length
+- **LQ** Laser Quality, maximum line segment length
 
 ## Adding Objects
 
