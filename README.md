@@ -24,11 +24,71 @@ Global variables use 41296 bytes (50%) of dynamic memory, leaving 40624 bytes fo
 
 ## User Interface
 
-  The web page allows you to select objects defined in the program:
+  The web page allows you to select objects for display:
 
 ![Screenshot](Images/Screenshot.png)
 
-The web page is generated dynamically from the contents of the objName and genName arrays.
+- The Object and Generator lists are generated dynamically from the contents of the objName and genName arrays.
+- **KPPS** is the speed of the scanner, Kilo Positions Per Second
+- **LTD** Laser Toggle Delay, the latency of the scanner, in milliseconds
+- **LQ** Laser Quality, maximum line segment length
 
+## Adding Objects
+
+### Convert an ILDA file to an include object (.h)
+
+Convert the ILD file to text using LaserBoy http://laserboy.org/code/LaserBoy_2017_08_06.zip:
+
+- i input
+- 1 ILD
+- filename
+- 1 replace
+- o output
+- 4 text
+- 3 all frames
+- filename
+
+LaserBoy has options for optimizing the output (e.g.: h - shiftS) which might also be useful.
+
+Convert the text file to an include file (.h):
+
+```
+Scripts/convert.pl filename
+```
+A second conversion script is also provided:
+```
+Scripts/convert2.pl filename
+```
+...which returns the laser position to the starting point at the end of the object, to improve looping.
+
+
+### Add initializer code to the bottom of the include file.  For example:
+
+```
+...
+0x49d0b65,
+0x49d0b65,
+};
+
+
+void ilda12k() {
+  objectCount++;  
+  objectAddress[objectCount] = draw_ilda12k;
+  objectName[objectCount] = "ILDA12K";
+  objectSize[objectCount] = sizeof(draw_ilda12k)/sizeof(uint32_t);
+}
+```
+
+### Include the file in the program:
+```
+#include "ilda12k.h"
+```
+
+### Initialize the object in the setup() section:
+
+```
+  ilda12k();
+
+```
 ## Samples
 
