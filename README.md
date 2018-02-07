@@ -12,6 +12,7 @@ http://www.instructables.com/id/Arduino-Laser-Show-With-Real-Galvos/
 * Laser Galvonometer (e.g.: https://www.ebay.com/itm/20Kpps-max-30kpps-laser-scanning-galvo-scanner-ILDA-Closed-Loop-for-laser-show-/302624823271)
 * TTL Laser Diode (https://www.adafruit.com/product/1056)
 * Fixed Laser Mounting Stand (https://www.adafruit.com/product/1094)
+* Dual Channel 12-bit DAC (MCP4822 or MCP4922.  see: http://www.instructables.com/id/Arduino-Laser-Show-With-Real-Galvos/ for details)
 * Bipolar Amplifier (see: http://www.instructables.com/id/Arduino-Laser-Show-With-Real-Galvos/ for details)
 
 ### Memory usage:
