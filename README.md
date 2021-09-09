@@ -28,7 +28,9 @@ The mounting holes on the bottom of the galvonometer are M4-.70
 
 ## User Interface
 
-  The web page allows you to select objects for display:
+The first time it boots it will create a Soft Access Point with **SSID**: `LaserDemo` and **PSK**: `carbondioxide`.<br> Open <http://laserdemo.local/config> to configure the WiFi<br>
+
+<http://laserdemo.local/> allows you to select objects for display:
 
 ![Screenshot](Images/Screenshot.png)
 
@@ -58,29 +60,6 @@ Convert the text file to an include file (.h):
 
 ```
 Scripts/convert.pl filename
-```
-A second conversion script is also provided:
-```
-Scripts/convert2.pl filename
-```
-...which returns the laser position to the starting point at the end of the object, to improve looping.
-
-
-### Add initializer code to the bottom of the include file.  For example:
-
-```
-...
-0x49d0b65,
-0x49d0b65,
-};
-
-
-void ilda12k() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_ilda12k;
-  objectName[objectCount] = "ILDA12K";
-  objectSize[objectCount] = sizeof(draw_ilda12k)/sizeof(uint32_t);
-}
 ```
 
 ### Include the file in the program:

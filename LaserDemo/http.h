@@ -1,6 +1,9 @@
+#ifndef HTTP_H
+#define HTTP_H
 #include <ESP8266WebServer.h>
 
 ESP8266WebServer server ( 80 );
+#endif
 
 int kpps, ltd, lq;
 
@@ -78,7 +81,7 @@ void handleRoot() {
 //-------------------
 
   sprintf ( temp,
-  "<form action='/config'><table style='float: left' border='1' cellpadding='5'>\
+  "<form action='/serverConfig'><table style='float: left' border='1' cellpadding='5'>\
   <tr><th>Config</th></tr>\
   <tr><td cellpadding='10'>KPPS<br><input type=number style='width:100px' name='kpps' value='%d'><br>\
           LTD<br><input type=number style='width:100px' name='ltd' value='%d'><br>\
@@ -163,7 +166,7 @@ void httpSetup() {
 
   server.on ( "/", handleRoot );
   server.on ( "/select", objectSelect );
-  server.on ( "/config", serverConfig );
+  server.on ( "/serverConfig", serverConfig );
   server.onNotFound ( handleNotFound );
   server.begin();
 

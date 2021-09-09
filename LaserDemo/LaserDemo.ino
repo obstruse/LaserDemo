@@ -24,6 +24,7 @@ int genIndex = 0;
 Laser laser(4);
 
 #include "http.h"
+#include "httpWifi.h"
 
 int objectNumber = 0;
 int objectStart = 0;
@@ -63,6 +64,9 @@ void genAlphabet(int init) {
 //--------------------------------------------
 void setup()
 { 
+
+  Serial.begin(57600);
+
   // initialize object array 
   barney10();
   gear1();
@@ -88,6 +92,7 @@ void setup()
   wifiSetup();
 
   httpSetup();
+  httpWifiSetup();
 
 }
 
@@ -95,7 +100,7 @@ void setup()
 void loop() {
 
   server.handleClient();
-  ArduinoOTA.handle();
+  wifiClient();
 
   if (objectIndex > 0 && objectIndex <= objectCount) {
     Drawing::drawObject(objectAddress[objectIndex], objectSize[objectIndex]);
