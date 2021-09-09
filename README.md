@@ -36,7 +36,7 @@ The first time it boots it will create a Soft Access Point with **SSID**: `Laser
 
 - The Object and Generator lists are generated dynamically from the contents of the objName and genName arrays.
 - **KPPS** is the speed of the scanner, Kilo Positions Per Second
-- **LTD** Laser Toggle Delay, the latency of the scanner, in milliseconds
+- **LTD** Laser Toggle Delay, the latency of the scanner, in microseconds
 - **LQ** Laser Quality, maximum line segment length
 
 ## Adding Objects
