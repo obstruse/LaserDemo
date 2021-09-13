@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_barney10[] = {
+static const uint32_t PROGMEM draw_barney10[] = {
 0x9a10562,
 0x9a10562,
 0x9a10562,
@@ -22801,11 +22801,7 @@ const uint32_t PROGMEM draw_barney10[] = {
 0x9a1070f,
 };
 
-
-void barney10() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_barney10;
-  objectName[objectCount] = "barney10";
-  objectSize[objectCount] = sizeof(draw_barney10)/sizeof(uint32_t);
-}
-
+objectCount++;  
+objectAddress[objectCount] = draw_barney10;
+objectName[objectCount] = "barney10";
+objectSize[objectCount] = sizeof(draw_barney10)/sizeof(uint32_t);

@@ -104,6 +104,7 @@ void wifiSetup() {
   WiFi.setAutoConnect(false);
   WiFi.setAutoReconnect(true);    // turns out that 'true' works a lot better, and 'false' doens't really improve response much
   WiFi.mode(WIFI_STA);
+  WiFi.hostname( IOTname );
 
   WiFi.begin ();    // use last ssid/password
 

@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_obama[] = {
+static const uint32_t PROGMEM draw_obama[] = {
 0x80608e7,
 0x881808bb,
 0x881808bb,
@@ -1137,11 +1137,7 @@ const uint32_t PROGMEM draw_obama[] = {
 0x80608e7,
 };
 
-
-void obama() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_obama;
-  objectName[objectCount] = "Obama";
-  objectSize[objectCount] = sizeof(draw_obama)/sizeof(uint32_t);
-}
-
+objectCount++;  
+objectAddress[objectCount] = draw_obama;
+objectName[objectCount] = "Obama";
+objectSize[objectCount] = sizeof(draw_obama)/sizeof(uint32_t);

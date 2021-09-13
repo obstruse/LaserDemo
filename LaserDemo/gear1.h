@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_gear1[] = {
+static const uint32_t PROGMEM draw_gear1[] = {
 0x7ff08f9,
 0x87a508e8,
 0x875708b8,
@@ -1047,10 +1047,7 @@ const uint32_t PROGMEM draw_gear1[] = {
 0x7ff08f9,
 };
 
-void gear1() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_gear1;
-  objectName[objectCount] = "gear-1";
-  objectSize[objectCount] = sizeof(draw_gear1)/sizeof(uint32_t);
-}
-
+objectCount++;  
+objectAddress[objectCount] = draw_gear1;
+objectName[objectCount] = "gear-1";
+objectSize[objectCount] = sizeof(draw_gear1)/sizeof(uint32_t);

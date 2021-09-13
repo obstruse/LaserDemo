@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_spiral3[] = {
+static const uint32_t PROGMEM draw_spiral3[] = {
 0x7ff0d5e,
 0x87ff0d5e,
 0x87ff0d5e,
@@ -1829,10 +1829,7 @@ const uint32_t PROGMEM draw_spiral3[] = {
 0x87ff0d5e,
 };
 
-void spiral3() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_spiral3;
-  objectName[objectCount] = "spiral-3";
-  objectSize[objectCount] = sizeof(draw_spiral3)/sizeof(uint32_t);
-}
-
+objectCount++;  
+objectAddress[objectCount] = draw_spiral3;
+objectName[objectCount] = "spiral-3";
+objectSize[objectCount] = sizeof(draw_spiral3)/sizeof(uint32_t);

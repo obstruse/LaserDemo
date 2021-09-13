@@ -1,5 +1,14 @@
 char fileName[] = __FILE__;
 
+// Arduino IDE:
+//   in the hardware subfolder of the Arduino IDE installation folder, create platform.txt:
+//       compiler.cpp.extra_flags=-D__PATH__="{build.source.path}"
+// Platformio IDE:
+//   add to the platformio.ini this build_flag:
+//       -D__PATH__=\"$PROJECT_DIR\"
+
+char pathName[] = __PATH__;
+
 char temp[1000];
 
 const uint32_t* objectAddress[20];
@@ -31,21 +40,6 @@ int objectStart = 0;
 int objectTime = 0;
 int objectCalls = 0;
 
-
-// objects
-#include "horse10.h"
-#include "barney10.h"
-#include "ilda12k.h"
-#include "gear1.h"
-#include "gear2.h"
-#include "spiral1.h"
-#include "spiral1a.h"
-#include "spiral2.h"
-#include "spiral2a.h"
-#include "spiral3.h"
-#include "obama.h"
-
-
 //--------------------------------------------
 void genAlphabet(int init) {
   if (init) {
@@ -68,17 +62,16 @@ void setup()
   Serial.begin(57600);
 
   // initialize object array 
-  barney10();
-  gear1();
-  gear2();
-  horse10();
-  ilda12k();
-  obama();
-  spiral1();
-  spiral1a();
-  spiral2();
-  spiral2a();
-  spiral3();
+  #include "ilda12k.h"
+  #include "barney10.h"
+  #include "horse10.h"
+  #include "obama.h"
+  #include "gear1.h"
+  #include "gear2.h"
+  #include "spiral1.h"
+  #include "spiral1a.h"
+  #include "spiral2.h"
+  #include "spiral3.h"
     
   // initialize generator array
   genAlphabet(1);

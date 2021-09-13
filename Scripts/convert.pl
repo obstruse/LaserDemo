@@ -23,7 +23,7 @@ $field2End = 0;
 
 $increment = 200;
 
-printf $INCLUDE "const uint32_t PROGMEM draw_$name\[] = {\n";
+printf $INCLUDE "static const uint32_t PROGMEM draw_$name\[] = {\n";
 while ( <$ILDA> ) {
 	@field = split (/\s+/,$_);
 	if ( $_ =~ /^frame/ ) {
@@ -73,9 +73,8 @@ while ( $loopOutput && ($field1Start != $field1End || $field2Start != $field2End
 printf $INCLUDE "};\n";
 
 printf $INCLUDE "
-void $name() {
   objectCount++;
   objectAddress[objectCount] = draw_$name;
   objectName[objectCount] = \"$name\";
   objectSize[objectCount] = sizeof(draw_$name)/sizeof(uint32_t);
-}\n";
+  ";

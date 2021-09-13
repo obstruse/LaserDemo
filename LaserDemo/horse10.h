@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_horse10[] = {
+static const uint32_t PROGMEM draw_horse10[] = {
 0x1a60818,
 0x1a60818,
 0x1a60818,
@@ -7204,11 +7204,7 @@ const uint32_t PROGMEM draw_horse10[] = {
 0x35e0947,
 };
 
-
-void horse10() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_horse10;   
-  objectName[objectCount] = "horse10";
-  objectSize[objectCount] = sizeof(draw_horse10)/sizeof(uint32_t);
-}
-
+objectCount++;  
+objectAddress[objectCount] = draw_horse10;   
+objectName[objectCount] = "horse10";
+objectSize[objectCount] = sizeof(draw_horse10)/sizeof(uint32_t);

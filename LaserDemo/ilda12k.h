@@ -1,4 +1,4 @@
-const uint32_t PROGMEM draw_ilda12k[] = {
+static const uint32_t PROGMEM draw_ilda12k[] = {
 0xb2b0000,
 0xa8a0000,
 0x9e90000,
@@ -1192,11 +1192,7 @@ const uint32_t PROGMEM draw_ilda12k[] = {
 0x49d0b65,
 };
 
-
-void ilda12k() {
-  objectCount++;  
-  objectAddress[objectCount] = draw_ilda12k;
-  objectName[objectCount] = "ILDA12K";
-  objectSize[objectCount] = sizeof(draw_ilda12k)/sizeof(uint32_t);
-}
-
+objectCount++;
+objectAddress[objectCount] = draw_ilda12k;
+objectName[objectCount] = "ilda12k";
+objectSize[objectCount] = sizeof(draw_ilda12k)/sizeof(uint32_t);
