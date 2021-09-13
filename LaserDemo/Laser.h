@@ -126,7 +126,7 @@ private:
 
   int SCANNER_KPPS = 20;
   int LASER_TOGGLE_DELAY = 120;
-  int LASER_QUALITY = 400;
+  int LASER_QUALITY = 4096; // maximum length of line segment before prog splits it into chunks.  default to OFF
 
 
 
