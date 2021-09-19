@@ -32,16 +32,13 @@ void handleRoot() {
   </head>\
   <body>\
     <h1>Laser</h1>\
-    <p>Uptime: %02d:%02d:%02d</p>\
-    <p>%s %s %s</p>",
-    hr, min % 60, sec % 60,
-    fileName, __DATE__, __TIME__
+    <table border=0 cellpadding=0><tr>"
   );
   server.sendContent ( temp );
 
 //-------------------
   sprintf ( temp,
-  "<form><table style='float: left' border='1' cellpadding='5'>\
+  "<td valign='top'><form><table style='float: left' border='1' cellpadding='5'>\
   <tr><th>Object</th></tr>\
   <tr><td><table border='0' cellpadding='5'>");
   server.sendContent ( temp );
@@ -56,12 +53,12 @@ void handleRoot() {
   sprintf ( temp,
   "</table></td></tr>\
   <tr><td cellpadding=10><button style='width:100px' type='submit' formaction='/select?obj=0'>Stop</button></td></tr>\
-  </table></form>");
+  </table></form></td>");
   server.sendContent( temp );
 //-------------------
 
   sprintf ( temp,
-  "<form><table style='float: left' border='1' cellpadding='5'>\
+  "<td valign='top'><form><table style='float: left' border='1' cellpadding='5'>\
   <tr><th>Generator</th></tr>\
   <tr><td><table border='0' cellpadding='5'>");
   server.sendContent ( temp );
@@ -76,12 +73,12 @@ void handleRoot() {
   sprintf ( temp,
   "</table></td></tr>\
   <tr><td cellpadding=10><button style='width:100px' type='submit' formaction='/select?gen=0'>Stop</button></td></tr>\
-  </table></form>");
+  </table></form></td>");
   server.sendContent( temp );
 //-------------------
 
   sprintf ( temp,
-  "<form action='/serverConfig'><table style='float: left' border='1' cellpadding='5'>\
+  "<td valign='top'><form action='/serverConfig'><table style='float: left' border='1' cellpadding='5'>\
   <tr><th>Config</th></tr>\
   <tr><td cellpadding='10'>KPPS<br><input type=number style='width:100px' name='kpps' value='%d'><br>\
           LTD<br><input type=number style='width:100px' name='ltd' value='%d'><br>\
@@ -92,13 +89,16 @@ void handleRoot() {
 
   sprintf ( temp,
   "<tr><td><input type='submit' style='width:100px' value='Submit'></td></tr>\
-  </table></form>");
+  </table></form></td>");
   server.sendContent( temp );
 //-------------------
 
-  
-
-  sprintf ( temp, "</body></html>" );
+  sprintf ( temp,
+"</tr></table><br><p>Uptime: %02d:%02d:%02d</p>\
+    <p>%s/%s %s %s</p>\
+    </body></html>",
+    hr, min % 60, sec % 60,
+    pathName, fileName, __DATE__, __TIME__);
   server.sendContent ( temp );
 
   server.sendContent (" ");
