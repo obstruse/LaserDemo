@@ -30,11 +30,12 @@ void Laser::init() {
   digitalWrite (LDAC_PIN, LOW);
 
   SPI.begin();
-  SPI.beginTransaction (SPISettings (4000000, MSBFIRST, SPI_MODE0));
+  SPI.beginTransaction (SPISettings (20000000L, MSBFIRST, SPI_MODE0));  //MCP4922 supports 20MHz clock
   pinMode(_laserPin, OUTPUT);
 }
 
 void Laser::sendToDAC(int x, int y) {
+
   #ifdef LASER_SWAP_XY
     int x1 = y;
     int y1 = x;
@@ -56,20 +57,20 @@ void Laser::sendToDAC(int x, int y) {
   scanner_throttle();
 
   x1 &= 0xfff;
-  digitalWrite (SS_PIN, LOW);
+  GPOC = (1<<SS_PIN);
   SPI.transfer((x1 >> 8) | commandBits1);
   SPI.transfer((x1 & 0xff));
-  digitalWrite (SS_PIN, HIGH);
+  GPOS = (1<<SS_PIN);
 
   y1 &= 0xfff;
-  digitalWrite (SS_PIN, LOW);
+  GPOC = (1<<SS_PIN);
   SPI.transfer((y1 >> 8) | commandBits2);
   SPI.transfer((y1 & 0xff));
-  digitalWrite (SS_PIN, HIGH);
+  GPOS = (1<<SS_PIN);
 
   // latch
-  digitalWrite (LDAC_PIN, LOW);
-  digitalWrite (LDAC_PIN, HIGH);
+  GPOC = (1<<LDAC_PIN);
+  GPOS = (1<<LDAC_PIN);
 }
 
 void Laser::sendto (long xpos, long ypos) {
@@ -126,11 +127,10 @@ void Laser::scanner_throttle() {
             + 16) & 0xf;
 
   ttlAction = ttlQueue[ttlThen];
-
   if (ttlAction >= 0) {
     delayMicroseconds(ttlFine);
-    digitalWrite(_laserPin, ttlAction);
-    ttlAction = -1;
+    if (ttlAction) GPOS = (1<<_laserPin);
+    else           GPOC = (1<<_laserPin);
     yield();
   } 
   

@@ -11,34 +11,29 @@ char pathName[] = __PATH__;
 
 char temp[1000];
 
-const uint32_t* objectAddress[20];
-const char* objectName[20];
-int objectSize[20];
+const int objectMax = 20;
+const uint32_t* objectAddress[objectMax];
+const char* objectName[objectMax];
+int objectSize[objectMax];
 int objectCount = 0;
 int objectIndex = 0;
 
-void (*genAddress[10])(int);
-const char* genName[10];
+const int genMax = 10;
+void (*genAddress[genMax])(int);
+const char* genName[genMax];
 int genCount = 0;
 int genIndex = 0;
 
-#include "wifi.h"
-
 #include "Drawing.h"
 #include "Laser.h"
-
-#include <TimeLib.h>
-
 // Create laser instance (with laser pointer connected to digital pin 4)
 Laser laser(4);
 
+#include <TimeLib.h>
+
+#include "wifi.h"
 #include "http.h"
 #include "httpWifi.h"
-
-int objectNumber = 0;
-int objectStart = 0;
-int objectTime = 0;
-int objectCalls = 0;
 
 //--------------------------------------------
 void genAlphabet(int init) {
