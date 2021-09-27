@@ -1,5 +1,6 @@
-![redCat](/Images/redCat-3.png)
-<br><sub><sup>*Louis Wain Cat, Travelling Salesman Problem solution, 20,000 points, 20KPPS, one second exposure*</sup></sub>
+![redCat](/Images/redCat-3.png "Louis Wain Cat, Travelling Salesman Problem solution, 20,000 points, 20KPPS, one second exposure")
+![PeterMax](/Images/petermax3.png "Peter Max, TSP solution, 2,000 points, 5KPPS")
+
 
 # LaserDemo
 Generate display patterns for laser galvanometer, using ESP8266
