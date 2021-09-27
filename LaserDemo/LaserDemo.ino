@@ -29,8 +29,6 @@ int genIndex = 0;
 // Create laser instance (with laser pointer connected to digital pin 4)
 Laser laser(4);
 
-#include <TimeLib.h>
-
 #include "wifi.h"
 #include "http.h"
 #include "httpWifi.h"
@@ -49,6 +47,40 @@ void genAlphabet(int init) {
   laser.setScale(1);
 }
 
+//--------------------------------------------
+void genSquare(int init) {
+  int kpps, ltd, lq, lq2;
+
+  if (init) {
+    genCount++;
+    genAddress[genCount] = genSquare;
+    genName[genCount] = "Square";
+  } else {
+
+    laser.getOptions(kpps,ltd,lq);
+    laser.setOptions(kpps,ltd,75);
+
+    laser.on();
+
+    laser.sendto(0,0);
+    laser.sendto(0,4095);
+    laser.sendto(4095,4095);
+    laser.sendto(4095,0);
+    laser.sendto(0,0);
+  
+    laser.off();
+    laser.sendto(0,0);
+    laser.sendto(0,0);
+    laser.sendto(0,0);
+    laser.sendto(0,0);
+    laser.sendto(0,0);
+    laser.sendto(0,0);
+
+    laser.getOptions(kpps,ltd,lq2);
+    laser.setOptions(kpps,ltd,lq);
+  }
+
+}
 
 //--------------------------------------------
 void setup()
@@ -58,6 +90,7 @@ void setup()
 
   // initialize object array 
   #include "ilda12k.h"
+  #include "petermax2.h"
   #include "barney10.h"
   #include "horse10.h"
   #include "obama.h"
@@ -70,6 +103,7 @@ void setup()
     
   // initialize generator array
   genAlphabet(1);
+  genSquare(1);
   
   laser.init();
   laser.setScale(1);
@@ -89,6 +123,9 @@ void loop() {
 
   server.handleClient();
   wifiClient();
+
+  extern unsigned long nextYield;
+  nextYield = millis() + 1000;    // feed the dog at least every 1000 milliseconds
 
   if (objectIndex > 0 && objectIndex <= objectCount) {
     Drawing::drawObject(objectAddress[objectIndex], objectSize[objectIndex]);

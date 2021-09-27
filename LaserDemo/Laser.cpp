@@ -118,6 +118,7 @@ void Laser::off() {
   }
 }
 
+unsigned long nextYield;
 void Laser::scanner_throttle() {
   int ttlAction;
   int ttlThen;
@@ -131,7 +132,11 @@ void Laser::scanner_throttle() {
     delayMicroseconds(ttlFine);
     if (ttlAction) GPOS = (1<<_laserPin);
     else           GPOC = (1<<_laserPin);
+  } 
+  
+  if (nextYield < millis()) {
     yield();
+    nextYield = millis() + 1000;
   } 
   
   while (_last_scan + (1000/SCANNER_KPPS) > micros() );
