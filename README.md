@@ -3,7 +3,7 @@
 
 
 # LaserDemo
-Generate display patterns for laser galvanometer, using ESP8266.  Speed of the pattern is limited by the galvanometers, usually 20,000 - 30,000 positions per second.  A pattern with more than a few thousand positions will flicker.  Large patterns, e.g. LouisWainCat @ 20,000 positions, require a long exposure (one second) to view.
+Generate display patterns for laser galvanometer, using ESP8266.  Speed of the pattern is limited by the galvanometers, usually 20,000 - 30,000 positions per second.  A pattern with more than a few thousand positions will flicker.  Large patterns, e.g. LouisWainCat @ 20,000 positions, require a long exposure (one second or more) to view.  Reducing the speed of the data sent to the galvanometer produces a more accurate pattern, but with more flicker.  
 
 Based on "Arduino Laser Show With Real Galvos" by DeltaFlo:
 
