@@ -24,6 +24,12 @@ const char* genName[genMax];
 int genCount = 0;
 int genIndex = 0;
 
+struct {
+  int points = 0;
+  int * x;
+  int * y;
+} DRAW;
+
 #include "Drawing.h"
 #include "Laser.h"
 // Create laser instance (with laser pointer connected to digital pin 4)
@@ -83,6 +89,22 @@ void genSquare(int init) {
 }
 
 //--------------------------------------------
+void drawPoints(int init) {
+
+  if (init) {
+    genCount++;
+    genAddress[genCount] = drawPoints;
+    genName[genCount] = "Draw";
+  } else {
+    laser.on();
+    for ( int i = 0; i < DRAW.points; i++) {
+      laser.sendto(DRAW.x[i], DRAW.y[i]);
+    }
+    laser.off();
+  }
+}
+
+//--------------------------------------------
 void setup()
 { 
 
@@ -90,10 +112,11 @@ void setup()
 
   // initialize object array 
   #include "ilda12k.h"
+  #include "cat20.h"
+  #include "dylan5k.h"
   #include "petermax2.h"
   #include "barney10.h"
   #include "horse10.h"
-  #include "obama.h"
   #include "gear1.h"
   #include "gear2.h"
   #include "spiral1.h"
@@ -104,7 +127,8 @@ void setup()
   // initialize generator array
   genAlphabet(1);
   genSquare(1);
-  
+  drawPoints(1);
+
   laser.init();
   laser.setScale(1);
   laser.setOffset(0,0);
@@ -115,6 +139,10 @@ void setup()
 
   httpSetup();
   httpWifiSetup();
+
+  // shutter pin
+  pinMode(12, OUTPUT);
+  digitalWrite(12, LOW); 
 
 }
 
@@ -128,7 +156,19 @@ void loop() {
   nextYield = millis() + 1000;    // feed the dog at least every 1000 milliseconds
 
   if (objectIndex > 0 && objectIndex <= objectCount) {
+    // modifications for cat capture, using remote shutter, not using script
+    //laser.sendto(0,0);
+    //
+    //digitalWrite(12, HIGH);   // trigger camera, focus locked
+    //delay(100);               
+    //digitalWrite(12, LOW);    // ...begin exposure
+    //delay(600);               // wait a bit for exposure to start
+
     Drawing::drawObject(objectAddress[objectIndex], objectSize[objectIndex]);
+
+    // modifications for cat capture
+    //laser.sendto(4095,4095);
+    //objectIndex = 0;
   }
 
   if (genIndex > 0 && genIndex <= genCount) {

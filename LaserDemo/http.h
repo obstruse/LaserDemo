@@ -95,10 +95,13 @@ void handleRoot() {
 
   sprintf ( temp,
 "</tr></table><br><p>Uptime: %02d:%02d:%02d</p>\
-    <p>%s/%s %s %s</p>\
-    </body></html>",
+    <p>%s/%s %s %s</p>",
     hr, min % 60, sec % 60,
     pathName, fileName, __DATE__, __TIME__);
+  server.sendContent ( temp );
+
+  sprintf ( temp,
+"</body></html>");
   server.sendContent ( temp );
 
   server.sendContent (" ");
@@ -143,6 +146,42 @@ void serverConfig() {
 }
 
 //--------------------------------------------
+void draw() {
+
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  server.sendHeader("Content-Type", "text/plain", true);
+  server.sendHeader("Cache-Control", "no-cache");
+  server.send(200);
+
+  sprintf ( temp, "args: %d\n", server.args() );
+  server.sendContent ( temp );
+
+  DRAW.points = 0;
+  
+  delete DRAW.x;
+  delete DRAW.y;
+  DRAW.x = new int[server.args()];
+  DRAW.y = new int[server.args()];
+
+  for ( int i = 0; i < server.args(); i++ ) {
+    sscanf( server.argName(i).c_str(), "%d,%d",&DRAW.x[i],&DRAW.y[i]);
+    sprintf ( temp, "arg #: %d, X: %d, Y:%d\n", i, DRAW.x[i], DRAW.y[i]);
+    server.sendContent ( temp );
+  }
+
+  DRAW.points = server.args();
+
+  server.sendContent (" ");
+/*
+  strtok
+  You would only use strtok() when someone threatens your life if you don't do so. 
+  And you'd only use it for long enough to get you out of the life-threatening situation; 
+  you would then abandon all use of it once more. It is poisonous; do not use it. 
+  It would be better to write your own strtok_r() or strsep() than to use strtok().
+*/
+}
+
+//--------------------------------------------
 void handleNotFound() {
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -167,6 +206,7 @@ void httpSetup() {
   server.on ( "/", handleRoot );
   server.on ( "/select", objectSelect );
   server.on ( "/serverConfig", serverConfig );
+  server.on ( "/draw", draw);
   server.onNotFound ( handleNotFound );
   server.begin();
 
