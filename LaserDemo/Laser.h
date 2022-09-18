@@ -44,6 +44,8 @@ public:
   //! send the laser to the given position, scaled and translated and line clipped.
   void sendto(long x, long y);
   
+  void flush();
+  
   void wait(long length);
 
   void on();
@@ -88,7 +90,9 @@ private:
 
   FIXPT FPquality;
 
-  FIXPT FPx0;
+  // current x position
+  FIXPT FPx0;   
+  // current y position
   FIXPT FPy0;
   int  _state;
 

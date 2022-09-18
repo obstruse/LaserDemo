@@ -35,7 +35,6 @@ void Laser::init() {
 }
 
 void Laser::sendToDAC(int x, int y) {
-
   #ifdef LASER_SWAP_XY
     int x1 = y;
     int y1 = x;
@@ -120,8 +119,11 @@ void Laser::off() {
 
 unsigned long nextYield;
 void Laser::scanner_throttle() {
+  // set the scanner speed and toggle the laser TTL after delay
   int ttlAction;
   int ttlThen;
+//
+//  GPOC = (1<<12); // measure time on pin 12, end
 
   ttlThen = (ttlNow 
             - ttlCourse
@@ -137,16 +139,24 @@ void Laser::scanner_throttle() {
   if (nextYield < millis()) {
     yield();
     nextYield = millis() + 1000;
-  } 
-  
-  while (_last_scan + (1000/SCANNER_KPPS) > micros() );
+  }
 
+  while (_last_scan + (1000/SCANNER_KPPS) > micros() );
+  
   ttlNow = (ttlNow + 1) & 0xf;
   ttlQueue[ttlNow] = -1;
+//
+//  GPOS = (1<<12); // measure time on pin 12, start
   
   _last_scan = micros();
 }
 
+void Laser::flush() {
+  for (int i = 0; i < ttlCourse; i++) {
+    sendToDAC(TO_INT(FPx0), TO_INT(FPy0));
+  }
+
+}
 
 void Laser::setOptions(int kpps, int ltd, int lq) {
   if ( kpps ) { SCANNER_KPPS = kpps; }

@@ -75,12 +75,7 @@ void genSquare(int init) {
     laser.sendto(0,0);
   
     laser.off();
-    laser.sendto(0,0);
-    laser.sendto(0,0);
-    laser.sendto(0,0);
-    laser.sendto(0,0);
-    laser.sendto(0,0);
-    laser.sendto(0,0);
+    laser.flush();
 
     laser.getOptions(kpps,ltd,lq2);
     laser.setOptions(kpps,ltd,lq);
@@ -96,11 +91,16 @@ void drawPoints(int init) {
     genAddress[genCount] = drawPoints;
     genName[genCount] = "Draw";
   } else {
-    laser.on();
-    for ( int i = 0; i < DRAW.points; i++) {
-      laser.sendto(DRAW.x[i], DRAW.y[i]);
+    if ( DRAW.points ) {                  // if there are points to draw...
+      laser.sendto(DRAW.x[0], DRAW.y[0]); // ...send the first point...
+      laser.on();                         // ... and then turn the laser on. (doesn't increment queue)
+      laser.flush();                      // increments the queue a few times so single point draw will be visible
+      for ( int i = 1; i < DRAW.points; i++) {
+        laser.sendto(DRAW.x[i], DRAW.y[i]);
+      }
     }
-    laser.off();
+    laser.off();                          // the Off is enqued... (doesn't increment queue)
+    laser.flush();                        // flush the queue so that the off is executed
   }
 }
 

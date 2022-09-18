@@ -13,6 +13,8 @@ pygame.init()
 pygame.display.init()
 pygame.display.set_caption('Draw')
 
+timer = pygame.time.Clock()
+
 WHITE = (255,255,255)
 BLACK = (0,0,0)
 
@@ -92,6 +94,8 @@ lastPos = (0,0)
 active = True
 calibrate = False
 while active:
+    timer.tick(10)
+    
     #camera.capture(camBuffer, format='rgb')
     #camImage = pygame.image.frombuffer(camBuffer,res, 'RGB')
     #lcd.blit(camImage,(0,0))
@@ -122,7 +126,7 @@ while active:
                     # send calibrate dots to laser
                     try:
                         r = requests.get("http://laserdemo.home/serverConfig?lq=75")
-                        cal = f"0,{laserRes[1]}&{laserRes[0]},{laserRes[1]}&{laserRes[0]},0&0,0"
+                        cal = f"0,0&0,{laserRes[1]}&{laserRes[0]},{laserRes[1]}&{laserRes[0]},0&0,0"
                         r = requests.get(f"http://laserdemo.home/draw?{cal}")
                     except:
                         print("Calibrate Dots error")
