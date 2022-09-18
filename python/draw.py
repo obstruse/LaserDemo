@@ -51,6 +51,7 @@ overlay.set_colorkey((0,0,0))
 
 # active surfact
 laserSurf = pygame.surface.Surface(lcdRes)
+laserSurfRect = laserSurf.get_rect()
 laserSurf.set_colorkey((0,0,0))
 
 # menu surface
@@ -78,13 +79,12 @@ def mapToLaser(pos) :
     My = pos[1]
 
     # translate
-    Lx = Mx - TL[0]
-    Ly = My - TL[1]
+    Lx = Mx - laserSurfRect.x
+    Ly = My - laserSurfRect.y
     # scale
-    Lx *= (laserRes[0]/(TR[0]-TL[0]))
-    Ly *= (laserRes[1]/(BR[1]-TL[1]))
+    Lx *= (laserRes[0]/laserSurfRect.width)
+    Ly *= (laserRes[1]/laserSurfRect.height)
 
-    #return f"{int (Lx)},{int(laserRes[1]- Ly)}"
     return f"{int (Lx)},{int(laserRes[1] - Ly)}"
 
 posList = ""
@@ -157,7 +157,8 @@ while active:
                     pygame.draw.circle(overlay, (0,255,0), pos, 5)
 
                 laserSurf.fill(BLACK)
-                pygame.draw.rect(laserSurf, WHITE, pygame.Rect(TL[0], TL[1],TR[0]-TL[0],BR[1]-TL[1]),3)
+                laserSurfRect = pygame.Rect(TL[0], TL[1],TR[0]-TL[0],BR[1]-TL[1])
+                pygame.draw.rect(laserSurf, WHITE, laserSurfRect,3)
             
                 print (f"TL: {TL}, TR: {TR}, BR: {BR}")
 
@@ -165,16 +166,17 @@ while active:
             # do draw stuff
             if ( e.type == MOUSEBUTTONDOWN) :
                 pos = pygame.mouse.get_pos()
-                # dot at position
-                pygame.draw.circle(overlay, (255,0,0), pos, 5)
-                # line from last pos
-                if lastPos != (0,0) :
-                    pygame.draw.line(overlay, (255,0,0), lastPos, pos, 3)
-                lastPos = pos
-                #add to list
-                # mapToLaser(pos)
-                #posList = f"{posList}&{map(pos[0])},{map(lcdRes[1]-pos[1])}"
-                posList = f"{posList}&{mapToLaser(pos)}"
+                if laserSurfRect.collidepoint(pos) :
+                    # dot at position
+                    pygame.draw.circle(overlay, (255,0,0), pos, 5)
+                    # line from last pos
+                    if lastPos != (0,0) :
+                        pygame.draw.line(overlay, (255,0,0), lastPos, pos, 3)
+                    lastPos = pos
+                    #add to list
+                    # mapToLaser(pos)
+                    #posList = f"{posList}&{map(pos[0])},{map(lcdRes[1]-pos[1])}"
+                    posList = f"{posList}&{mapToLaser(pos)}"
 
             if ( e.type == KEYUP) :
                 if e.key == K_c :
