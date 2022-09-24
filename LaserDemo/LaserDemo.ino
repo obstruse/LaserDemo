@@ -24,16 +24,12 @@ const char* genName[genMax];
 int genCount = 0;
 int genIndex = 0;
 
-struct {
-  int points = 0;
-  int * x;
-  int * y;
-} DRAW;
+
+#include "Laser.h"
+Laser laser(4);       // Create laser instance with TTL on pin 4)
 
 #include "Drawing.h"
-#include "Laser.h"
-// Create laser instance (with laser pointer connected to digital pin 4)
-Laser laser(4);
+Drawing drawing;
 
 #include "wifi.h"
 #include "http.h"
@@ -47,8 +43,8 @@ void genAlphabet(int init) {
     genName[genCount] = "Alphabet";
   } else {
     laser.setScale(0.4);
-    Drawing::drawString(String("abcdefghijklm"), 500, 3500, 1);
-    Drawing::drawString(String("nopqrstuvwxyz"), 500, 1000, 1);    
+    drawing.drawString(String("abcdefghijklm"), 500, 3500);
+    drawing.drawString(String("nopqrstuvwxyz"), 500, 1000);    
   }
   laser.setScale(1);
 }
@@ -91,12 +87,12 @@ void drawPoints(int init) {
     genAddress[genCount] = drawPoints;
     genName[genCount] = "Draw";
   } else {
-    if ( DRAW.points ) {                  // if there are points to draw...
-      laser.sendto(DRAW.x[0], DRAW.y[0]); // ...send the first point...
+    if ( drawing.points ) {                  // if there are points to draw...
+      laser.sendto(drawing.pX[0], drawing.pY[0]); // ...send the first point...
       laser.on();                         // ... and then turn the laser on. (doesn't increment queue)
       laser.flush();                      // increments the queue a few times so single point draw will be visible
-      for ( int i = 1; i < DRAW.points; i++) {
-        laser.sendto(DRAW.x[i], DRAW.y[i]);
+      for ( int i = 1; i < drawing.points; i++) {
+        laser.sendto(drawing.pX[i], drawing.pY[i]);
       }
     }
     laser.off();                          // the Off is enqued... (doesn't increment queue)
@@ -133,8 +129,6 @@ void setup()
   laser.setScale(1);
   laser.setOffset(0,0);
 
-  laserPoints = 0;
-
   wifiSetup();
 
   httpSetup();
@@ -152,23 +146,8 @@ void loop() {
   server.handleClient();
   wifiClient();
 
-  extern unsigned long nextYield;
-  nextYield = millis() + 1000;    // feed the dog at least every 1000 milliseconds
-
-  if (objectIndex > 0 && objectIndex <= objectCount) {
-    // modifications for cat capture, using remote shutter, not using script
-    //laser.sendto(0,0);
-    //
-    //digitalWrite(12, HIGH);   // trigger camera, focus locked
-    //delay(100);               
-    //digitalWrite(12, LOW);    // ...begin exposure
-    //delay(600);               // wait a bit for exposure to start
-
-    Drawing::drawObject(objectAddress[objectIndex], objectSize[objectIndex]);
-
-    // modifications for cat capture
-    //laser.sendto(4095,4095);
-    //objectIndex = 0;
+  if (objectIndex > 0 && objectIndex <= objectCount) {     
+    drawing.drawObject(objectAddress[objectIndex], objectSize[objectIndex]);
   }
 
   if (genIndex > 0 && genIndex <= genCount) {

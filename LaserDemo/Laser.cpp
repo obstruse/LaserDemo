@@ -2,8 +2,6 @@
 // Copyright 2016 Florian Link (at) gmx.de
 #include "Laser.h"
 
-int laserPoints = 0;
-
 Laser::Laser(int laserPin) {
   _last_scan = 0;
   
@@ -51,10 +49,9 @@ void Laser::sendToDAC(int x, int y) {
     y1 = 4095 - y1;
   #endif
 
-  laserPoints++;
+  Points++;    // statictics
 
-  scanner_throttle();
-
+  // send position to galvos
   x1 &= 0xfff;
   GPOC = (1<<SS_PIN);
   SPI.transfer((x1 >> 8) | commandBits1);
@@ -67,9 +64,13 @@ void Laser::sendToDAC(int x, int y) {
   SPI.transfer((y1 & 0xff));
   GPOS = (1<<SS_PIN);
 
-  // latch
+  // latch ADC
   GPOC = (1<<LDAC_PIN);
   GPOS = (1<<LDAC_PIN);
+
+  // throttle and Laser TTL
+  scanner_throttle();
+
 }
 
 void Laser::sendto (long xpos, long ypos) {
@@ -107,6 +108,7 @@ void Laser::on() {
   if (!_state) {
     _state = 1;
     ttlQueue[ttlNow] = 1;
+    GPOS = (1<<12); // measure time on pin 12, start
   }
 }
 
@@ -114,45 +116,43 @@ void Laser::off() {
   if (_state) {
     _state = 0;
     ttlQueue[ttlNow] = 0;
+    GPOS = (1<<12); // measure time on pin 12, start
   }
 }
 
-unsigned long nextYield;
+
+// set the scanner speed and toggle the laser TTL after delay
 void Laser::scanner_throttle() {
-  // set the scanner speed and toggle the laser TTL after delay
   int ttlAction;
   int ttlThen;
-//
-//  GPOC = (1<<12); // measure time on pin 12, end
 
-  ttlThen = (ttlNow 
-            - ttlCourse
-            + 16) & 0xf;
-
+  // check for TTL command in this time frame
+  ttlThen = (ttlNow - ttlCourse + 16) & 0xf;
   ttlAction = ttlQueue[ttlThen];
   if (ttlAction >= 0) {
+    // fine delay adjustment and action
     delayMicroseconds(ttlFine);
+    GPOC = (1<<12); // measure time on pin 12, end
     if (ttlAction) GPOS = (1<<_laserPin);
     else           GPOC = (1<<_laserPin);
   } 
   
+  // feeding the dog (WDT)
   if (nextYield < millis()) {
     yield();
     nextYield = millis() + 1000;
   }
 
+  // continue delay to end of frame
   while (_last_scan + (1000/SCANNER_KPPS) > micros() );
   
   ttlNow = (ttlNow + 1) & 0xf;
-  ttlQueue[ttlNow] = -1;
-//
-//  GPOS = (1<<12); // measure time on pin 12, start
-  
+  ttlQueue[ttlNow] = -1;  
   _last_scan = micros();
 }
 
 void Laser::flush() {
-  for (int i = 0; i < ttlCourse; i++) {
+  for (int i = 0; i <= ttlCourse; i++) {
     sendToDAC(TO_INT(FPx0), TO_INT(FPy0));
   }
 
@@ -163,8 +163,11 @@ void Laser::setOptions(int kpps, int ltd, int lq) {
   if ( ltd )  { LASER_TOGGLE_DELAY = ltd; }
   if ( lq )   { LASER_QUALITY = lq; }
 
-  ttlCourse = ceil(LASER_TOGGLE_DELAY * SCANNER_KPPS / 1000.0);
-  ttlFine   = LASER_TOGGLE_DELAY - (ttlCourse - 1) * 1000.0 / SCANNER_KPPS;
+  // number of frames (positions) in LTD, integer portion
+  //positions = LTD microseconds * seconds/1000000 microseconds * KiloPositions * 1000 Positions / KiloPosition
+  ttlCourse = floor(LASER_TOGGLE_DELAY * SCANNER_KPPS / 1000.0);
+  // remainder, microseconds
+  ttlFine   = LASER_TOGGLE_DELAY - (ttlCourse * 1000.0) / SCANNER_KPPS;
 
   FPquality = FROM_INT(LASER_QUALITY);
 }

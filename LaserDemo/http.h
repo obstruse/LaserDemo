@@ -94,8 +94,11 @@ void handleRoot() {
 //-------------------
 
   sprintf ( temp,
-"</tr></table><br><p>Uptime: %02d:%02d:%02d</p>\
+"</tr></table><br>\
+    <p>KPPS: %d</p>\
+    <p>Uptime: %02d:%02d:%02d</p>\
     <p>%s/%s %s %s</p>",
+    drawing.calcKPPS,
     hr, min % 60, sec % 60,
     pathName, fileName, __DATE__, __TIME__);
   server.sendContent ( temp );
@@ -156,20 +159,20 @@ void draw() {
   sprintf ( temp, "args: %d\n", server.args() );
   server.sendContent ( temp );
 
-  DRAW.points = 0;
+  drawing.points = 0;
   
-  delete DRAW.x;
-  delete DRAW.y;
-  DRAW.x = new int[server.args()];
-  DRAW.y = new int[server.args()];
+  delete drawing.pX;
+  delete drawing.pY;
+  drawing.pX = new int[server.args()];
+  drawing.pY = new int[server.args()];
 
   for ( int i = 0; i < server.args(); i++ ) {
-    sscanf( server.argName(i).c_str(), "%d,%d",&DRAW.x[i],&DRAW.y[i]);
-    sprintf ( temp, "arg #: %d, X: %d, Y:%d\n", i, DRAW.x[i], DRAW.y[i]);
+    sscanf( server.argName(i).c_str(), "%d,%d",&drawing.pX[i],&drawing.pY[i]);
+    sprintf ( temp, "arg #: %d, X: %d, Y:%d\n", i, drawing.pX[i], drawing.pY[i]);
     server.sendContent ( temp );
   }
 
-  DRAW.points = server.args();
+  drawing.points = server.args();
 
   server.sendContent (" ");
 /*

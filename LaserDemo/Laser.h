@@ -20,8 +20,6 @@
 #define commandBits1 B00110000    // |DACa|Unbuffered|1x gain|Active Mode|4 high bits data| next byte | 8 low bits data|
 #define commandBits2 B10110000    // |DACb|Unbuffered|1x gain|Active Mode|4 high bits data| next byte | 8 low bits data|
 
-extern int laserPoints;
-
 // -- The following flags can be used to rotate/flip the output without changing the DAC wiring, just uncomment the desired swap/flip
 // define this to swap X and Y on the DAC
 //#define LASER_SWAP_XY
@@ -38,7 +36,9 @@ public:
   //! which selects the digital pin that turns the laser pointer on/off.
   Laser(int laserPin);
 
-  
+  // count points displayed for statistics
+  int Points = 0;
+
   void init();
 
   //! send the laser to the given position, scaled and translated and line clipped.
@@ -73,6 +73,7 @@ private:
   int LASER_TOGGLE_DELAY = 120;
   int LASER_QUALITY = 4096; // maximum length of line segment before prog splits it into chunks.  default to OFF
 
+  unsigned long nextYield = 0;
 
 
 //! send X/Y to DAC
