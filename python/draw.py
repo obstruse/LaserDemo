@@ -8,6 +8,18 @@ from pygame.locals import *
 
 import requests
 
+from configparser import ConfigParser
+#import argparse
+
+# change to the python directory
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# read config file, to override the default (fallback) settings
+config = ConfigParser()
+config.read('config.ini')
+videoDev = config.get('Draw','videoDev',fallback='/dev/video0')
+laserURL = config.get('Draw','laserURL',fallback='http://laserdemo.local')
+
 # initialize display environment
 pygame.init()
 pygame.display.init()
@@ -25,9 +37,9 @@ requestRes = (1024,768)
 # camera surface
 import pygame.camera
 pygame.camera.init()
-cam = pygame.camera.Camera("/dev/video2",requestRes)
+cam = pygame.camera.Camera(videoDev,requestRes)    # requested resolution
 cam.start()
-camRes = cam.get_size()
+camRes = cam.get_size()                            # actual resolution
 print(cam.get_size())
 font = pygame.font.Font(None, 25)
 
@@ -125,9 +137,9 @@ while active:
                     laserSurf.fill(BLACK)
                     # send calibrate dots to laser
                     try:
-                        r = requests.get("http://laserdemo.home/serverConfig?lq=75")
+                        r = requests.get(f"{laserURL}/serverConfig?lq=75")
                         cal = f"0,0&0,{laserRes[1]}&{laserRes[0]},{laserRes[1]}&{laserRes[0]},0&0,0"
-                        r = requests.get(f"http://laserdemo.home/draw?{cal}")
+                        r = requests.get(f"{laserURL}/draw?{cal}")
                     except:
                         print("Calibrate Dots error")
                         #print(r.status_code)
@@ -136,7 +148,7 @@ while active:
                 else:
                     # turn off the calibrate dots
                     try:
-                        r = requests.get(f"http://laserdemo.home/draw?")
+                        r = requests.get(f"{laserURL}/draw?")
                     except:
                         print("Calibrate Dots error")
                         #print(r.status_code)
@@ -173,14 +185,18 @@ while active:
                 if laserSurfRect.collidepoint(pos) :
                     # dot at position
                     pygame.draw.circle(overlay, (255,0,0), pos, 5)
-                    # line from last pos
-                    if lastPos != (0,0) :
-                        pygame.draw.line(overlay, (255,0,0), lastPos, pos, 3)
+                    if pygame.mouse.get_pressed()[0] :  # left button, dot and line
+                        # line from last pos
+                        if lastPos != (0,0) :
+                            pygame.draw.line(overlay, (255,0,0), lastPos, pos, 3)
+                        posList = f"{posList}&{mapToLaser(pos)}"
+                    else:
+                        posList = f"{posList}&-{mapToLaser(pos)}"   # right button, dot only
+
                     lastPos = pos
                     #add to list
                     # mapToLaser(pos)
                     #posList = f"{posList}&{map(pos[0])},{map(lcdRes[1]-pos[1])}"
-                    posList = f"{posList}&{mapToLaser(pos)}"
 
             if ( e.type == KEYUP) :
                 if e.key == K_c :
@@ -192,7 +208,7 @@ while active:
                 if e.key == K_s :
                     print(posList)
                     try:
-                        r = requests.get(f"http://laserdemo.home/draw?{posList}")
+                        r = requests.get(f"{laserURL}/draw?{posList}")
                         print(r.status_code)
                         print(r.text)
                     except:
