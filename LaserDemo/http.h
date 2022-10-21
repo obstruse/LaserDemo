@@ -96,9 +96,13 @@ void handleRoot() {
   sprintf ( temp,
 "</tr></table><br>\
     <p>KPPS: %d</p>\
+    <p>sec: 1/%.0f</p>\
+    <p>positions: %d<p>\
     <p>Uptime: %02d:%02d:%02d</p>\
     <p>%s/%s %s %s</p>",
     drawing.calcKPPS,
+    1000.0/float(drawing.ms),
+    drawing.positions,
     hr, min % 60, sec % 60,
     pathName, fileName, __DATE__, __TIME__);
   server.sendContent ( temp );

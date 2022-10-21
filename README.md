@@ -99,7 +99,13 @@ For that you need a cable and an audio interface modified for DC-coupling:
 ![Cable](Images/cable.jpg)
 ![USB Audio](Images/USBaudio.jpg)
 
-Several laser programs can generate the audio (even LaserBoy), or use a DSP program like GRC or **Linux Laptop Orchestra** (Pd-L2Ork/Purr-data): 
+Several laser programs can generate the audio (even LaserBoy), or use a DSP program like **Gnuradio-Companion** or **Linux Laptop Orchestra** (Pd-L2Ork/Purr-data): 
 
-![analog](Images/IMG_1911-4.png)
+### Purr-data
+![Laser Mushrooms](Images/laserMushrooms.gif "Laser Mushrooms, Purr-data")
 
+### Gnuradio-Companion
+![epicycloid](Images/epicycloid.gif "Epicycloid, Gnuradio-companion")
+![multihypocycloid](Images/multihypocycloid.gif "Multihypocycloid, Gnuradio-companion")
+![spiral](Images/spiral.gif "Spiral, Circle * Sawtooth, Gnuradio-companion")
+![circleSaw](Images/circleSaw.gif "Spiral, Circle * Sawtooth, Gnuradio-companion")

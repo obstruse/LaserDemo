@@ -1,5 +1,26 @@
 #!/usr/bin/python3
 
+"""
+Draw laser patterns on wall, using camera for position reference.
+
+- Execute the "Draw" object on LaserDemo
+- start the draw python code on a computer with attached camera (USB cam or Raspberry Pi cam)
+    - python3 draw.py
+    - press "b" on keyboard to send calibration box to LaserDemo
+    - point camera at calibration box
+    - click top-left, top-right, bottom-right corners of calibration box
+    - white box is the drawing limit of the laser projector
+    - press "b" to leave calibrate
+- draw line with a left click within the box
+- draw a dot with a right click within the box
+- press "s" to send the pattern to the laser projector
+- press "c" to clear the pattern
+- press "q" to quit
+
+Edit config.ini to change videoDev and laserURL, and to select PIcamera mode (testing)
+
+"""
+
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
@@ -19,6 +40,7 @@ config = ConfigParser()
 config.read('config.ini')
 videoDev = config.get('Draw','videoDev',fallback='/dev/video0')
 laserURL = config.get('Draw','laserURL',fallback='http://laserdemo.local')
+PIcamera = config.getboolean('Draw','PIcamera',fallback=False)
 
 # initialize display environment
 pygame.init()
@@ -31,23 +53,24 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 
 requestRes = (1024,768)
-#width = width + width % 16      # must be a multiple of 16
-#height = width      # square
 
 # camera surface
-import pygame.camera
-pygame.camera.init()
-cam = pygame.camera.Camera(videoDev,requestRes)    # requested resolution
-cam.start()
-camRes = cam.get_size()                            # actual resolution
-print(cam.get_size())
-font = pygame.font.Font(None, 25)
+if PIcamera :
+    # PiCamera...
+    from picamera import PiCamera
+    cam = PiCamera(sensor_mode=0,resolution=requestRes)
+    camRes = cam.resolution
+    camBuffer = bytearray(3*camRes[0]*camRes[1])
+else :
+    # USB camera...
+    import pygame.camera
+    pygame.camera.init()
+    cam = pygame.camera.Camera(videoDev,requestRes)    # requested resolution
+    cam.start()
+    camRes = cam.get_size()                            # actual resolution
+    print(cam.get_size())
 
-# picamera ... sort of...
-#from picamera import PiCamera
-#camera = PiCamera()
-#camera.resolution = requestRes
-#camBuffer = bytearray(3*width*width)
+font = pygame.font.Font(None, 25)
 
 print("cam initialized")
 
@@ -106,17 +129,19 @@ lastPos = (0,0)
 active = True
 calibrate = False
 while active:
-    timer.tick(10)
-    
-    #camera.capture(camBuffer, format='rgb')
-    #camImage = pygame.image.frombuffer(camBuffer,res, 'RGB')
-    #lcd.blit(camImage,(0,0))
-    #pygame.display.flip()
-    if cam.query_image():
-        camImage = cam.get_image()
-        camRect = camImage.get_rect(center=lcdRect.center)
+    timer.tick(20)
 
-        lcd.blit(camImage, camRect)
+    if PIcamera :
+        # PiCamera...    
+        cam.capture(camBuffer, format='rgb')
+        camImage = pygame.image.frombuffer(camBuffer,camRes, 'RGB')
+    else:
+        # USB camera...
+        if cam.query_image():
+            camImage = cam.get_image()
+    
+    camRect = camImage.get_rect(center=lcdRect.center)
+    lcd.blit(camImage, camRect)
 
     events = pygame.event.get()
     for e in events:
@@ -194,9 +219,6 @@ while active:
                         posList = f"{posList}&-{mapToLaser(pos)}"   # right button, dot only
 
                     lastPos = pos
-                    #add to list
-                    # mapToLaser(pos)
-                    #posList = f"{posList}&{map(pos[0])},{map(lcdRes[1]-pos[1])}"
 
             if ( e.type == KEYUP) :
                 if e.key == K_c :
@@ -220,4 +242,5 @@ while active:
     lcd.blit(overlay,(0,0))
     pygame.display.flip()
 
+cam.stop()
 

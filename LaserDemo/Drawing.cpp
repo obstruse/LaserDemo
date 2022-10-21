@@ -150,5 +150,6 @@ void Drawing::drawObject(const uint32_t* data, int size, long X, long Y)
   
   // calculate KPPS
   calcKPPS = laser.Points / (millis()-startTime);
+  ms = (millis()-startTime);
 }
 

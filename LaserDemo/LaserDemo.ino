@@ -88,6 +88,8 @@ void drawPoints(int init) {
     genName[genCount] = "Draw";
   } else {
     if ( drawing.points ) {                  // if there are points to draw...
+      unsigned long startTime = millis()-1;
+      laser.Points = 0;
       laser.sendto(abs(drawing.pX[0]), drawing.pY[0]); // ...send the first point...
       laser.on();                         // ... and then turn the laser on. (doesn't increment queue)
       laser.flush();                      // increments the queue a few times so single point draw will be visible
@@ -99,6 +101,9 @@ void drawPoints(int init) {
         }
         laser.sendto(abs(drawing.pX[i]), drawing.pY[i]);
       }
+      drawing.calcKPPS = laser.Points / (millis()-startTime);
+      drawing.ms = (millis()-startTime);
+      drawing.positions = laser.Points;
     }
     laser.off();                          // the Off is enqued... (doesn't increment queue)
     laser.flush();                        // flush the queue so that the off is executed

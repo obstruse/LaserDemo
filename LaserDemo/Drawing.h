@@ -17,6 +17,8 @@ public:
 
   // calculated KPPS from last drawObject
   int calcKPPS = 0;
+  unsigned long ms = 0;
+  int positions = 0;
 
   //! Draws the given string at x,y position. 
   void drawString(String text, int x, int y );
