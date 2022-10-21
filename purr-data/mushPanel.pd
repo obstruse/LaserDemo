@@ -1,0 +1,91 @@
+#N struct 1025-color float x float y float farbe float ynpos;
+#N canvas 209 493 640 505 16;
+#X obj 0 0 cnv 15 640 479 empty empty empty 20 12 0 14 #000000 #404040
+0;
+#X obj 95 116 bng 59 250 50 0 step-1 empty 1 20 25 0 30 #ffffff #000000
+#000000;
+#X obj 175 116 bng 59 250 50 0 step-2 empty 2 20 25 0 30 #fcfcfc #000000
+#000000;
+#X obj 255 116 bng 59 250 50 0 step-3a empty 3A 10 25 0 30 #fcfcfc
+#000000 #000000;
+#X obj 255 198 bng 59 250 50 0 step-3b empty 3B 10 25 0 30 #fcfcfc
+#000000 #000000;
+#X obj 335 116 bng 59 250 50 0 step-4a empty 4A 10 25 0 30 #fcfcfc
+#000000 #000000;
+#X obj 336 198 bng 59 250 50 0 step-4b empty 4B 10 25 0 30 #fcfcfc
+#000000 #000000;
+#X obj 93 274 hsl 299 39 1 80 0 0 Hstretch Istretch stretch 125 15
+0 20 #e0e0e0 #000000 #000000 6790 1;
+#N canvas 1179 137 1019 1017 presets 0;
+#X obj 100 26 bng 15 250 50 0 empty step-1 empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 228 26 bng 15 250 50 0 empty step-2 empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 378 221 bng 15 250 50 0 empty step-3b empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 378 25 bng 15 250 50 0 empty step-3a empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X msg 100 52 step-1 \; step2 0 \; step3 0 \; step4 0 \;;
+#X obj 510 221 bng 15 250 50 0 empty step-4b empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 510 25 bng 15 250 50 0 empty step-4a empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X obj 101 271 int;
+#X floatatom 101 235 5 0 0 2 Hstretch Hstretch -, f 5;
+#X obj 101 313 send stretch;
+#X obj 376 421 bng 15 250 50 0 empty step-3c empty 17 7 0 10 #fcfcfc
+#000000 #000000;
+#X msg 93 773 \; pd dsp \$1;
+#X floatatom 93 559 5 0 0 2 Sdsp Sdsp -, f 5;
+#X obj 93 596 == 0;
+#X obj 113 633 moses 0.5;
+#X obj 242 786 pd-colors;
+#X msg 113 725 \; Rdsp color 13 12;
+#X msg 200 674 \; Rdsp color 16 12;
+#X obj 101 424 int;
+#X floatatom 100 388 5 0 0 2 Hloops Hloops -, f 5;
+#X obj 522 664 loadbang;
+#X msg 555 700 \; Rdsp 1;
+#X msg 510 249 step-4b \; step2 1 \; step3 1 \; step4 1 \; mushrooms
+3 \; space 3 \; wiggle 2 \;;
+#X msg 510 51 step-4a \; step2 1 \; step3 1 \; step4 1 \; mushrooms
+1 \; space 1 \; wiggle 1 \;;
+#X msg 228 52 step-2 \; step2 1 \; loops 10 \; stretch 7 \; step3 0
+\; step4 0 \;;
+#X obj 101 466 send loops;
+#X msg 526 753 \; Istretch 19 \; Iloops 40;
+#X msg 378 51 step-3a \; step2 1 \; loops 60 \; stretch 19 \; step3
+1 \; cap 0 \; step4 0 \;;
+#X msg 378 248 step-3b \; step2 1 \; loops 60 \; stretch 19 \; step3
+1 \; cap 0.74 \; step4 0 \;;
+#X msg 378 452 step-3c \; step2 1 \; loops 60 \; stretch 19 \; step3
+1 \; cap 1 \; step4 0 \;;
+#X obj 543 454 mushrooms;
+#X connect 0 0 4 0;
+#X connect 1 0 24 0;
+#X connect 2 0 28 0;
+#X connect 3 0 27 0;
+#X connect 5 0 22 0;
+#X connect 6 0 23 0;
+#X connect 7 0 9 0;
+#X connect 8 0 7 0;
+#X connect 10 0 29 0;
+#X connect 12 0 13 0;
+#X connect 13 0 11 0;
+#X connect 13 0 14 0;
+#X connect 14 0 16 0;
+#X connect 14 1 17 0;
+#X connect 18 0 25 0;
+#X connect 19 0 18 0;
+#X connect 20 0 21 0;
+#X connect 20 0 26 0;
+#X restore 438 215 pd presets;
+#X floatatom 438 284 5 0 0 0 - stretch -, f 5;
+#X obj 438 115 tgl 60 0 Sdsp Rdsp DSP 9 30 0 26 #fc2828 #000000 #202020
+1 1;
+#X obj 93 331 hsl 299 39 1 100 0 0 Hloops Iloops loops 135 15 0 20
+#e0e0e0 #000000 #000000 11739 1;
+#X floatatom 438 340 5 0 0 0 - loops -, f 5;
+#X obj 95 38 cnv 15 299 60 empty empty empty 20 12 0 14 #e0e0e0 #404040
+0;
+#X text 133 57 Oscilloscope Mushrooms;
